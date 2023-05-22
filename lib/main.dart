@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:udemy_app/gtadient_container.dart';
+import 'package:udemy_app/quiz.dart';
 
 void main() {
-  runApp(
-    const MaterialApp(
-      home: Scaffold(
-        body: GradientContainer(
-          Color.fromARGB(255, 33, 5, 109),
-          Color.fromARGB(255, 68, 21, 149),
-        ),
-      ),
-    ),
-  );
+  runApp(const Quiz());
 }
+
+// void main() {
+//   runApp(const MainApp());
+// }
+
+// class MainApp extends StatelessWidget {
+//   const MainApp({super.key});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return const Quiz();
+//   }
+// }
+
