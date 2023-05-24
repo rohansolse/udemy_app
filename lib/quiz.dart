@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:udemy_app/data/questions.dart';
 import 'package:udemy_app/questions_screen.dart';
+import 'package:udemy_app/results_screen.dart';
 import 'package:udemy_app/start_screen.dart';
 
 class Quiz extends StatefulWidget {
@@ -10,6 +12,7 @@ class Quiz extends StatefulWidget {
 }
 
 class _QuizState extends State<Quiz> {
+  final List<String> selectedAnswers = [];
   var activeScreen = 'start-screen';
 
   void switchScreen() {
@@ -18,11 +21,25 @@ class _QuizState extends State<Quiz> {
     });
   }
 
+  void chooseAnswer(String answer) {
+    selectedAnswers.add(answer);
+    if (selectedAnswers.length == questions.length) {
+      setState(() {
+        activeScreen = 'result-screen';
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget screenWidjet = StartScreen(switchScreen);
     if (activeScreen == 'question-screen') {
-      screenWidjet = const QuestionsScreen();
+      screenWidjet = QuestionsScreen(onSelectAnswer: chooseAnswer);
+    }
+    if (activeScreen == 'result-screen') {
+      screenWidjet = ResultScreen(
+        chosenAnswers: selectedAnswers,
+      );
     }
 
     return MaterialApp(
