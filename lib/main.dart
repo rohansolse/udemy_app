@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:udemy_app/widgets/expenses.dart';
 
 void main() {
   runApp(const MyApp());
@@ -9,29 +10,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo First',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('First App Fresh'),
-        ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              Text(
-                'Hello World!',
-              ),
-              Text(
-                'It\'s time to learn Flutter!',
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+    return const MaterialApp(home: Expenses());
   }
 }
