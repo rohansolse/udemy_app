@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:udemy_app/models/expense.dart';
 
 class NewExpense extends StatefulWidget {
-  const NewExpense({super.key});
+  const NewExpense({super.key, required this.onAddExpense});
+
+  final void Function(Expense expnese) onAddExpense;
 
   @override
   State<NewExpense> createState() => _NewExpenseState();
@@ -39,7 +41,7 @@ class _NewExpenseState extends State<NewExpense> {
         context: context,
         builder: (ctx) => AlertDialog(
           title: const Text('Invalid Input'),
-          content: const Text('Enter valid inputs'),
+          content: const Text('Enter valid Amount, Title & Pick Valid Date.'),
           actions: [
             TextButton(
               onPressed: () {
@@ -52,6 +54,15 @@ class _NewExpenseState extends State<NewExpense> {
       );
       return;
     }
+    widget.onAddExpense(
+      Expense(
+          title: _titleController.text.trim(),
+          amount: enteredAmount,
+          date: _selectedDate!,
+          category: _selectedCategory),
+    );
+
+    Navigator.pop(context);
   }
 
   @override
@@ -64,7 +75,7 @@ class _NewExpenseState extends State<NewExpense> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.fromLTRB(16, 50, 16, 16),
       child: Column(
         children: [
           TextField(
@@ -81,7 +92,7 @@ class _NewExpenseState extends State<NewExpense> {
                   controller: _amountController,
                   keyboardType: TextInputType.number,
                   decoration: const InputDecoration(
-                    prefixText: '\$ ',
+                    prefixText: '₹ ',
                     label: Text('Amount'),
                   ),
                 ),
@@ -95,7 +106,7 @@ class _NewExpenseState extends State<NewExpense> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(_selectedDate == null
-                        ? 'Selecte Date'
+                        ? 'Select Date'
                         : formatter.format(_selectedDate!)),
                     IconButton(
                         onPressed: _presentDatePicker,
