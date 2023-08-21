@@ -1,6 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:udemy_app/keys/keys.dart';
-import 'package:udemy_app/ui_updates_demo.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:udemy_app/categories.dart';
+
+final theme = ThemeData(
+  useMaterial3: true,
+  colorScheme: ColorScheme.fromSeed(
+    brightness: Brightness.dark,
+    seedColor: const Color.fromARGB(255, 131, 57, 0),
+  ),
+  textTheme: GoogleFonts.latoTextTheme(),
+);
 
 void main() {
   runApp(const App());
@@ -11,15 +20,6 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(useMaterial3: true),
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Flutter Internals'),
-        ),
-        // body: const UIUpdatesDemo(),
-        body: const Keys(),
-      ),
-    );
+    return MaterialApp(theme: theme, home: const CategoriresScreen());
   }
 }
