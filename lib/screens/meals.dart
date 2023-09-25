@@ -11,7 +11,10 @@ class MealsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Widget content = ListView.builder(
       itemCount: meals.length,
-      itemBuilder: (ctx, index) => Text(meals[index].title),
+      itemBuilder: (ctx, index) => Text(
+        meals[index].title,
+        style: const TextStyle(color: Colors.white),
+      ),
     );
 
     if (meals.isEmpty) {
@@ -19,10 +22,15 @@ class MealsScreen extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text('Uh oh ... nothing here!'),
-            const SizedBox(height: 10),
             Text(
-              'Try selecting a different category!',
+              'Uh oh... Nothing here!',
+              style: TextStyle(
+                color: Colors.red[300],
+              ),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              'Try selecting a different category...!',
               style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                     color: Theme.of(context).colorScheme.onBackground,
                   ),
