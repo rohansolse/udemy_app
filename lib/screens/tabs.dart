@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:udemy_app/models/meal.dart';
 import 'package:udemy_app/screens/categories.dart';
 import 'package:udemy_app/screens/meals.dart';
+import 'package:udemy_app/widget/drawer.dart';
 
 class TabsScreen extends StatefulWidget {
   const TabsScreen({super.key});
@@ -53,6 +54,13 @@ class _TabsScreenState extends State<TabsScreen> {
     });
   }
 
+  void _selectScreen(String identifier) {
+    if (identifier == "Filters") {
+    } else {
+      Navigator.of(context).pop();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget activePage = CategoriresScreen(
@@ -71,6 +79,9 @@ class _TabsScreenState extends State<TabsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(activePageTitle),
+      ),
+      drawer: MainDrawer(
+        onSelectScreen: _selectScreen,
       ),
       body: activePage,
       bottomNavigationBar: BottomNavigationBar(
