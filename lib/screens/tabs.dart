@@ -50,12 +50,12 @@ class _TabsScreenState extends State<TabsScreen> {
       setState(() {
         _favoriteMeals.remove(meal);
       });
-      _showMessage('${meal.title} removed from favorite list!', Colors.green);
+      _showMessage('${meal.title} added into favorite list!', Colors.red[700]!);
     } else {
       setState(() {
         _favoriteMeals.add(meal);
       });
-      _showMessage('${meal.title} added into favorite list!', Colors.red[700]!);
+      _showMessage('${meal.title} removed from favorite list!', Colors.green);
     }
   }
 
@@ -75,6 +75,10 @@ class _TabsScreenState extends State<TabsScreen> {
       );
       setState(() {
         _selectFilters = result ?? kInitialFilters;
+      });
+    } else {
+      setState(() {
+        _selectedPageIndex = 0;
       });
     }
   }
