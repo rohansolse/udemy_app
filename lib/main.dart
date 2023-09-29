@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:udemy_app/widgets/grocery_list.dart';
 
 void main() {
   runApp(const MyApp());
@@ -7,31 +8,21 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo First',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('First App Fresh'),
+      title: 'Flutter Groceries',
+      theme: ThemeData.dark().copyWith(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color.fromARGB(255, 147, 229, 250),
+          brightness: Brightness.dark,
+          surface: const Color.fromARGB(255, 42, 51, 59),
         ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              Text(
-                'Hello World!',
-              ),
-              Text(
-                'It\'s time to learn Flutter!',
-              ),
-            ],
-          ),
-        ),
+        scaffoldBackgroundColor: const Color.fromARGB(255, 50, 58, 60),
       ),
+      home: const GrocaryList(),
     );
   }
 }
