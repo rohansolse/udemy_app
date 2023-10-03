@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:udemy_app/data/categories.dart';
+import 'package:udemy_app/models/category.dart';
 
 class NewItem extends StatefulWidget {
   const NewItem({super.key});
@@ -10,9 +11,17 @@ class NewItem extends StatefulWidget {
 
 class _NewItemState extends State<NewItem> {
   final _formKey = GlobalKey<FormState>();
+  var enteredName = 'Demo';
+  var enteredQuantity = 1;
+  var selectedCategory = categories[Categories.vegetables];
 
   void _saveItem() {
-    _formKey.currentState!.validate();
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      print(enteredName);
+      print(enteredQuantity);
+      print(selectedCategory);
+    }
   }
 
   @override
@@ -32,12 +41,15 @@ class _NewItemState extends State<NewItem> {
                 decoration: const InputDecoration(
                   label: Text('Name'),
                 ),
-                initialValue: 'Demo',
+                initialValue: enteredName,
                 validator: (value) {
                   if (value == null || value.isEmpty || value.trim().length <= 1 || value.trim().length > 50) {
                     return 'Must Be between 1 and 50 characters.';
                   }
                   return null;
+                },
+                onSaved: (newValue) {
+                  enteredName = newValue!;
                 },
               ),
               Row(
@@ -49,12 +61,15 @@ class _NewItemState extends State<NewItem> {
                         label: Text('Quantity'),
                       ),
                       keyboardType: TextInputType.number,
-                      initialValue: '1',
+                      initialValue: enteredQuantity.toString(),
                       validator: (value) {
                         if (value == null || value.isEmpty || int.tryParse(value) == null || int.tryParse(value)! <= 0) {
                           return 'Must be a valid, positive number.';
                         }
                         return null;
+                      },
+                      onSaved: (newValue) {
+                        enteredQuantity = int.parse(newValue!);
                       },
                     ),
                   ),
@@ -78,7 +93,12 @@ class _NewItemState extends State<NewItem> {
                             ),
                           ),
                       ],
-                      onChanged: (value) {},
+                      value: selectedCategory,
+                      onChanged: (value) {
+                        setState(() {
+                          selectedCategory = value!;
+                        });
+                      },
                     ),
                   ),
                 ],
