@@ -1,6 +1,9 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:udemy_app/data/categories.dart';
 import 'package:udemy_app/models/category.dart';
+import 'package:udemy_app/models/grocery_item.dart';
 
 class NewItem extends StatefulWidget {
   const NewItem({super.key});
@@ -11,16 +14,24 @@ class NewItem extends StatefulWidget {
 
 class _NewItemState extends State<NewItem> {
   final _formKey = GlobalKey<FormState>();
-  var enteredName = 'Demo';
-  var enteredQuantity = 1;
-  var selectedCategory = categories[Categories.vegetables];
+  var _enteredName = 'Demo';
+  var _enteredQuantity = 1;
+  var _selectedCategory = categories[Categories.vegetables]!;
 
   void _saveItem() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      print(enteredName);
-      print(enteredQuantity);
-      print(selectedCategory);
+      print(_enteredName);
+      print(_enteredQuantity);
+      print(_selectedCategory);
+      Navigator.of(context).pop(
+        GroceryItem(
+          id: DateTime.now().toString(),
+          name: _enteredName,
+          quantity: _enteredQuantity,
+          category: _selectedCategory,
+        ),
+      );
     }
   }
 
@@ -41,7 +52,7 @@ class _NewItemState extends State<NewItem> {
                 decoration: const InputDecoration(
                   label: Text('Name'),
                 ),
-                initialValue: enteredName,
+                initialValue: _enteredName,
                 validator: (value) {
                   if (value == null || value.isEmpty || value.trim().length <= 1 || value.trim().length > 50) {
                     return 'Must Be between 1 and 50 characters.';
@@ -49,7 +60,7 @@ class _NewItemState extends State<NewItem> {
                   return null;
                 },
                 onSaved: (newValue) {
-                  enteredName = newValue!;
+                  _enteredName = newValue!;
                 },
               ),
               Row(
@@ -61,7 +72,7 @@ class _NewItemState extends State<NewItem> {
                         label: Text('Quantity'),
                       ),
                       keyboardType: TextInputType.number,
-                      initialValue: enteredQuantity.toString(),
+                      initialValue: _enteredQuantity.toString(),
                       validator: (value) {
                         if (value == null || value.isEmpty || int.tryParse(value) == null || int.tryParse(value)! <= 0) {
                           return 'Must be a valid, positive number.';
@@ -69,7 +80,7 @@ class _NewItemState extends State<NewItem> {
                         return null;
                       },
                       onSaved: (newValue) {
-                        enteredQuantity = int.parse(newValue!);
+                        _enteredQuantity = int.parse(newValue!);
                       },
                     ),
                   ),
@@ -93,10 +104,10 @@ class _NewItemState extends State<NewItem> {
                             ),
                           ),
                       ],
-                      value: selectedCategory,
+                      value: _selectedCategory,
                       onChanged: (value) {
                         setState(() {
-                          selectedCategory = value!;
+                          _selectedCategory = value!;
                         });
                       },
                     ),
