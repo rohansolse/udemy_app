@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, use_build_context_synchronously
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -16,7 +16,7 @@ class GrocaryList extends StatefulWidget {
 class _GrocaryListState extends State<GrocaryList> {
   List<GroceryItem> _groceryItems = [];
   var isLoading = true;
-
+  String? error;
   @override
   void initState() {
     super.initState();
@@ -27,21 +27,28 @@ class _GrocaryListState extends State<GrocaryList> {
     final url = Uri.https('flutter-prep-23395-default-rtdb.firebaseio.com', 'shopping-list.json');
     final response = await http.get(url);
     print(response.body);
-    final Map<String, dynamic> listData = json.decode(response.body);
-    final List<GroceryItem> loadedItems = [];
-    for (final item in listData.entries) {
-      final category = categories.entries.firstWhere((element) => element.value.title == item.value['category']).value;
-      loadedItems.add(GroceryItem(
-        id: item.key,
-        name: item.value['name'],
-        quantity: item.value['quantity'],
-        category: category,
-      ));
+    print(response.statusCode);
+    if (response.statusCode >= 400) {
+      setState(() {
+        error = 'Not able to fetch the data. Please try again later.';
+      });
+    } else {
+      final Map<String, dynamic> listData = json.decode(response.body);
+      final List<GroceryItem> loadedItems = [];
+      for (final item in listData.entries) {
+        final category = categories.entries.firstWhere((element) => element.value.title == item.value['category']).value;
+        loadedItems.add(GroceryItem(
+          id: item.key,
+          name: item.value['name'],
+          quantity: item.value['quantity'],
+          category: category,
+        ));
+      }
+      setState(() {
+        _groceryItems = loadedItems;
+        isLoading = false;
+      });
     }
-    setState(() {
-      _groceryItems = loadedItems;
-      isLoading = false;
-    });
   }
 
   void _addItem() async {
@@ -58,15 +65,27 @@ class _GrocaryListState extends State<GrocaryList> {
     });
   }
 
-  void _removeItems(GroceryItem item) {
-    _groceryItems.remove(item);
+  void _removeItems(GroceryItem item) async {
+    final index = _groceryItems.indexOf(item);
+    setState(() {
+      _groceryItems.remove(item);
+    });
+    late String snackMsg = "is removed";
+    Color color = const Color.fromARGB(255, 255, 0, 0);
+    final url = Uri.https('flutter-prep-23395-default-rtdb.firebaseio.com', 'shopping-list/${item.id}.json');
+    final response = await http.delete(url);
+    if (response.statusCode >= 400) {
+      _groceryItems.insert(index, item);
+      snackMsg = 'is not able to remove from Database. Please try again later';
+      color = const Color.fromARGB(255, 1, 226, 31);
+    }
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          '${item.name} is removed!',
-          selectionColor: Colors.red[400],
+          '${item.name} $snackMsg',
+          selectionColor: color,
         ),
-        duration: const Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 1000),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(5.0),
         ),
@@ -110,6 +129,12 @@ class _GrocaryListState extends State<GrocaryList> {
             trailing: Text(_groceryItems[index].quantity.toString()),
           ),
         ),
+      );
+    }
+
+    if (error != null) {
+      content = Center(
+        child: Text(error!),
       );
     }
 
