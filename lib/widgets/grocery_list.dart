@@ -15,6 +15,7 @@ class GrocaryList extends StatefulWidget {
 
 class _GrocaryListState extends State<GrocaryList> {
   List<GroceryItem> _groceryItems = [];
+  var isLoading = true;
 
   @override
   void initState() {
@@ -39,16 +40,22 @@ class _GrocaryListState extends State<GrocaryList> {
     }
     setState(() {
       _groceryItems = loadedItems;
+      isLoading = false;
     });
   }
 
   void _addItem() async {
-    await Navigator.of(context).push<GroceryItem>(
+    final newItem = await Navigator.of(context).push<GroceryItem>(
       MaterialPageRoute(
         builder: (ctx) => const NewItem(),
       ),
     );
-    _loadItems();
+    if (newItem == null) {
+      return;
+    }
+    setState(() {
+      _groceryItems.add(newItem);
+    });
   }
 
   void _removeItems(GroceryItem item) {
@@ -78,6 +85,12 @@ class _GrocaryListState extends State<GrocaryList> {
         ),
       ),
     );
+
+    if (isLoading) {
+      content = const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
 
     if (_groceryItems.isNotEmpty) {
       content = ListView.builder(
