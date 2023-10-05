@@ -25,14 +25,26 @@ class _GrocaryListState extends State<GrocaryList> {
 
   void _loadItems() async {
     final url = Uri.https('flutter-prep-23395-default-rtdb.firebaseio.com', 'shopping-list.json');
-    final response = await http.get(url);
-    print(response.body);
-    print(response.statusCode);
-    if (response.statusCode >= 400) {
-      setState(() {
-        error = 'Not able to fetch the data. Please try again later.';
-      });
-    } else {
+
+    try {
+      final response = await http.get(url);
+      print(response.body);
+      print(response.statusCode);
+
+      if (response.statusCode >= 400) {
+        setState(() {
+          error = 'Not able to fetch the data. Please try again later.';
+        });
+        return;
+      }
+
+      if (response.body == 'null') {
+        setState(() {
+          isLoading = false;
+        });
+        return;
+      }
+
       final Map<String, dynamic> listData = json.decode(response.body);
       final List<GroceryItem> loadedItems = [];
       for (final item in listData.entries) {
@@ -43,10 +55,15 @@ class _GrocaryListState extends State<GrocaryList> {
           quantity: item.value['quantity'],
           category: category,
         ));
+
+        setState(() {
+          _groceryItems = loadedItems;
+          isLoading = false;
+        });
       }
+    } catch (err) {
       setState(() {
-        _groceryItems = loadedItems;
-        isLoading = false;
+        error = 'Something Went Wrong. Please try again later.';
       });
     }
   }
