@@ -18,10 +18,10 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(
           title: const Text('First App Fresh'),
         ),
-        body: Center(
+        body: const Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
+            children: [
               Text(
                 'Hello World!',
               ),
