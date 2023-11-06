@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'counter_bloc.dart';
+import 'counter_cubit.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: BlocProvider(
-        create: (context) => CounterBloc(),
+        create: (context) => CounterCubit(),
         child: const MyHomePage(),
       ),
     );
@@ -25,20 +25,20 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final CounterBloc counterBloc = BlocProvider.of<CounterBloc>(context);
+    final CounterCubit counterCubit = BlocProvider.of<CounterCubit>(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Counter App with BLoC'),
+        title: const Text('Counter App with Cubit'),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+          children: <Widget>[
             const Text(
               'Counter Value:',
             ),
-            BlocBuilder<CounterBloc, int>(
+            BlocBuilder<CounterCubit, int>(
               builder: (context, count) {
                 return Text(
                   '$count',
@@ -52,14 +52,14 @@ class MyHomePage extends StatelessWidget {
               children: <Widget>[
                 ElevatedButton(
                   onPressed: () {
-                    counterBloc.add(CounterEvent.increment);
+                    counterCubit.increment();
                   },
                   child: const Icon(Icons.add),
                 ),
                 const SizedBox(width: 16),
                 ElevatedButton(
                   onPressed: () {
-                    counterBloc.add(CounterEvent.decrement);
+                    counterCubit.decrement();
                   },
                   child: const Icon(Icons.remove),
                 ),
