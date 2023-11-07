@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:udemy_app/model/place.dart';
+import 'package:udemy_app/screens/place_detail.dart';
 
 class PlacesListWidget extends StatelessWidget {
   const PlacesListWidget({
@@ -15,7 +16,10 @@ class PlacesListWidget extends StatelessWidget {
       return Center(
         child: Text(
           'No places added yet',
-          style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Theme.of(context).colorScheme.onBackground),
+          style: Theme.of(context)
+              .textTheme
+              .bodyLarge!
+              .copyWith(color: Theme.of(context).colorScheme.onBackground),
         ),
       );
     }
@@ -24,8 +28,18 @@ class PlacesListWidget extends StatelessWidget {
       itemBuilder: (ctx, index) => ListTile(
         title: Text(
           places[index].title,
-          style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Theme.of(context).colorScheme.onBackground),
+          style: Theme.of(context)
+              .textTheme
+              .titleMedium!
+              .copyWith(color: Theme.of(context).colorScheme.onBackground),
         ),
+        onTap: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (ctx) => PlaceDetailScreen(place: places[index]),
+            ),
+          );
+        },
       ),
     );
   }
